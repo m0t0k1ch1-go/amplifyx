@@ -1,4 +1,4 @@
-module github.com/m0t0k1ch1-go/amplifyx
+module github.com/m0t0k1ch1-go/amplifyx/v2
 
 go 1.24.0
 
