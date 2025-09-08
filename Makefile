@@ -18,3 +18,7 @@ deps:
 lint:
 	go vet ./...
 	go tool staticcheck ./...
+
+.PHONY: install
+install:
+	go install -ldflags="-s -w" -trimpath ./cmd/amplifyx
