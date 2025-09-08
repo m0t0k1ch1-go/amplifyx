@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"log/slog"
 	"os"
 
 	"github.com/alecthomas/kong"
@@ -11,32 +11,80 @@ import (
 	"github.com/m0t0k1ch1-go/amplifyx"
 )
 
+var (
+	cmd  string
+	args amplifyx.Args
+)
+
+func init() {
+	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stderr, nil)))
+}
+
 func main() {
-	ctx := context.Background()
+	os.Exit(run(context.Background()))
+}
 
-	kc := kong.Parse(&amplifyx.CLI)
+func run(ctx context.Context) int {
+	if err := parse(); err != nil {
+		return fail(ctx, err)
+	}
 
-	client, err := amplifyx.NewClient(ctx)
+	if args.Timeout > 0 {
+		var cancel context.CancelFunc
+
+		ctx, cancel = context.WithTimeout(ctx, args.Timeout)
+		defer cancel()
+	}
+
+	var err error
+
+	if panicErr := oops.Recover(func() {
+		err = command(ctx)
+	}); panicErr != nil {
+		err = panicErr
+	}
+
 	if err != nil {
-		fatal(oops.Wrapf(err, "failed to initialize client"))
+		return fail(ctx, err)
 	}
 
-	var cmdErr error
+	return 0
+}
 
-	switch cmd := kc.Command(); cmd {
+func parse() error {
+	k, err := kong.New(&args)
+	if err != nil {
+		return oops.Wrapf(err, "failed to initialize args parser")
+	}
+
+	kctx, err := k.Parse(os.Args[1:])
+	if err != nil {
+		return oops.Wrapf(err, "failed to parse args")
+	}
+
+	cmd = kctx.Command()
+
+	return nil
+}
+
+func command(ctx context.Context) error {
+	app, err := amplifyx.NewApp(ctx)
+	if err != nil {
+		return oops.Wrapf(err, "failed to initialize app")
+	}
+
+	switch cmd {
 	case "deploy":
-		cmdErr = client.Deploy(ctx, amplifyx.CLI.Deploy)
+		return app.Deploy(ctx, args.Deploy)
 	case "version":
-		fmt.Printf("amplifyx %s\n", client.Version())
+		return app.Version(ctx, args.Version)
 	default:
-		cmdErr = oops.Errorf("unexpected command: %s", cmd)
-	}
-	if cmdErr != nil {
-		fatal(cmdErr)
+		return oops.Errorf("unexpected command: %s", cmd)
 	}
 }
 
-func fatal(err error) {
-	fmt.Fprintf(os.Stderr, "%s\n", err.Error())
-	os.Exit(1)
+func fail(ctx context.Context, err error) int {
+	slog.ErrorContext(ctx, err.Error())
+
+	return 1
 }
