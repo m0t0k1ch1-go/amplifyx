@@ -1,6 +1,8 @@
 module github.com/m0t0k1ch1-go/amplifyx
 
-go 1.23
+go 1.24.0
+
+toolchain go1.24.6
 
 require (
 	github.com/alecthomas/kong v0.9.0
