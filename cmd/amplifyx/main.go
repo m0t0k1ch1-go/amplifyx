@@ -34,7 +34,7 @@ func run(ctx context.Context) int {
 		cmd = kctx.Command()
 	}
 
-	app, err := amplifyx.NewApp(ctx)
+	app, err := amplifyx.InitializeApp(ctx)
 	if err != nil {
 		return fail(oops.Wrapf(err, "failed to initialize app"))
 	}
