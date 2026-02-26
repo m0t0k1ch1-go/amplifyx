@@ -3,11 +3,11 @@ setup: deps-dev
 
 .PHONY: deps-dev
 deps-dev:
-	pnpm install
+	pnpm install --frozen-lockfile
 
 .PHONY: commit
 commit:
-	pnpm cz
+	pnpm czg
 
 .PHONY: deps
 deps:
