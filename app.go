@@ -11,7 +11,7 @@ import (
 )
 
 type App struct {
-	stdout        io.Writer
+	writer        io.Writer
 	amplifyClient *awsamplify.Client
 }
 
@@ -22,7 +22,7 @@ func NewApp(ctx context.Context) (*App, error) {
 	}
 
 	return &App{
-		stdout:        os.Stdout,
+		writer:        os.Stdout,
 		amplifyClient: awsamplify.NewFromConfig(awsConf),
 	}, nil
 }
