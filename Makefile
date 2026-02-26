@@ -14,6 +14,10 @@ deps:
 	go mod download
 	go mod verify
 
+.PHONY: generate
+generate:
+	go tool wire gen ./...
+
 .PHONY: lint
 lint:
 	go vet ./...
