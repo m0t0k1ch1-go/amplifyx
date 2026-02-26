@@ -19,7 +19,7 @@ func (app *App) Version(ctx context.Context, args VersionArgs) error {
 		}
 	}
 
-	fmt.Fprintln(app.stdout, version)
+	fmt.Fprintln(app.writer, version)
 
 	return nil
 }
