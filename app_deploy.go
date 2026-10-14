@@ -49,7 +49,7 @@ func (app App) Deploy(ctx context.Context, args DeployArgs) error {
 	}, jobSummary.Status) {
 		select {
 		case <-ctx.Done():
-			return context.Cause(ctx)
+			return oops.Wrap(context.Cause(ctx))
 		case <-time.After(args.ObservationInterval):
 		}
 
