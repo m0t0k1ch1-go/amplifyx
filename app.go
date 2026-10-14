@@ -2,18 +2,16 @@ package amplifyx
 
 import (
 	"io"
-
-	awsamplify "github.com/aws/aws-sdk-go-v2/service/amplify"
 )
 
 type App struct {
 	writer        io.Writer
-	amplifyClient *awsamplify.Client
+	amplifyClient AmplifyClient
 }
 
 func NewApp(
 	writer io.Writer,
-	amplifyClient *awsamplify.Client,
+	amplifyClient AmplifyClient,
 ) *App {
 	return &App{
 		writer:        writer,
