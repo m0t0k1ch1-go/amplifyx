@@ -7,6 +7,7 @@ deps:
 
 .PHONY: generate
 generate:
+	go tool moq -out internal/gen/moq/mocks.go -pkg moq . AmplifyClient
 	go tool wire gen ./...
 
 .PHONY: lint
