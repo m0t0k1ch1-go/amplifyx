@@ -18,11 +18,19 @@ type DeployArgs struct {
 }
 
 func (args DeployArgs) Validate() error {
+	errs := []error{}
+
+	if len(args.AppID) == 0 {
+		errs = append(errs, oops.New("invalid app id: must not be empty"))
+	}
+	if len(args.Branch) == 0 {
+		errs = append(errs, oops.New("invalid branch: must not be empty"))
+	}
 	if args.ObservationInterval < time.Second {
-		return oops.New("invalid observation interval: must be at least 1s")
+		errs = append(errs, oops.New("invalid observation interval: must be at least 1s"))
 	}
 
-	return nil
+	return oops.Join(errs...)
 }
 
 func (app App) Deploy(ctx context.Context, args DeployArgs) error {
