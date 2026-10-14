@@ -4,22 +4,19 @@ import (
 	"context"
 	"fmt"
 	"runtime/debug"
+
+	"github.com/samber/oops"
 )
 
 type VersionArgs struct{}
 
 func (app App) Version(ctx context.Context, args VersionArgs) error {
-	var version string
-	{
-		info, ok := debug.ReadBuildInfo()
-		if !ok {
-			version = "unknown"
-		} else {
-			version = info.Main.Version
-		}
+	info, ok := debug.ReadBuildInfo()
+	if !ok {
+		return oops.New("failed to read build info")
 	}
 
-	fmt.Fprintln(app.writer, version)
+	fmt.Fprintln(app.writer, info.Main.Version)
 
 	return nil
 }
