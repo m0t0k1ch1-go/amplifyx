@@ -25,7 +25,7 @@ func (args DeployArgs) Validate() error {
 	return nil
 }
 
-func (app *App) Deploy(ctx context.Context, args DeployArgs) error {
+func (app App) Deploy(ctx context.Context, args DeployArgs) error {
 	var jobSummary *awsamplifytypes.JobSummary
 	{
 		out, err := app.amplifyClient.StartJob(ctx, &awsamplify.StartJobInput{

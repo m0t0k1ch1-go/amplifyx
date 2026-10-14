@@ -8,7 +8,7 @@ import (
 
 type VersionArgs struct{}
 
-func (app *App) Version(ctx context.Context, args VersionArgs) error {
+func (app App) Version(ctx context.Context, args VersionArgs) error {
 	var version string
 	{
 		info, ok := debug.ReadBuildInfo()
