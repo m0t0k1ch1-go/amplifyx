@@ -1,18 +1,9 @@
-.PHONY: setup
-setup: deps/node
+include conventions.mk
 
 .PHONY: deps
 deps:
 	go mod download
 	go mod verify
-
-.PHONY: deps/node
-deps/node:
-	pnpm install --frozen-lockfile
-
-.PHONY: commit
-commit:
-	pnpm czg
 
 .PHONY: generate
 generate:
@@ -22,6 +13,10 @@ generate:
 lint:
 	go vet ./...
 	go tool staticcheck ./...
+
+.PHONY: test
+test:
+	go test $(APP_TEST_FLAGS) ./...
 
 .PHONY: install
 install:
