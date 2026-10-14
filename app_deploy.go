@@ -50,10 +50,8 @@ func (app App) Deploy(ctx context.Context, args DeployArgs) error {
 		select {
 		case <-ctx.Done():
 			return context.Cause(ctx)
-		default:
+		case <-time.After(args.ObservationInterval):
 		}
-
-		time.Sleep(args.ObservationInterval)
 
 		{
 			out, err := app.amplifyClient.GetJob(ctx, &awsamplify.GetJobInput{
