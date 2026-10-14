@@ -15,7 +15,6 @@ var (
 	ProviderSet = wire.NewSet(
 		provideAWSConfig,
 		provideAWSAmplifyClient,
-
 		provideApp,
 	)
 )

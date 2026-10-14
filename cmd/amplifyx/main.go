@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"log/slog"
 	"os"
 
 	"github.com/alecthomas/kong"
@@ -11,69 +11,69 @@ import (
 	"github.com/m0t0k1ch1-go/amplifyx/v2"
 )
 
+var (
+	errLogger = slog.New(slog.NewJSONHandler(os.Stderr, nil))
+)
+
 func main() {
 	os.Exit(run(context.Background()))
 }
 
 func run(ctx context.Context) int {
 	var (
-		cmd  string
-		args amplifyx.Args
+		command string
+		args    amplifyx.Args
 	)
 	{
 		k, err := kong.New(&args)
 		if err != nil {
-			return fail(oops.Wrapf(err, "failed to initialize args parser"))
+			return fail(ctx, oops.Wrapf(err, "failed to initialize args parser"))
 		}
 
 		kctx, err := k.Parse(os.Args[1:])
 		if err != nil {
-			return fail(oops.Wrapf(err, "failed to parse args"))
+			return fail(ctx, oops.Wrapf(err, "failed to parse args"))
 		}
 
-		cmd = kctx.Command()
+		command = kctx.Command()
 	}
 
 	app, err := amplifyx.InitializeApp(ctx)
 	if err != nil {
-		return fail(oops.Wrapf(err, "failed to initialize app"))
+		return fail(ctx, oops.Wrapf(err, "failed to initialize app"))
 	}
 
 	if args.Timeout > 0 {
 		var cancel context.CancelFunc
-
 		ctx, cancel = context.WithTimeout(ctx, args.Timeout)
 		defer cancel()
 	}
 
-	if err := command(ctx, app, cmd, args); err != nil {
-		return fail(oops.Wrapf(err, "failed to execute command"))
+	{
+		var err error
+
+		if panicErr := oops.Recover(func() {
+			switch command {
+			case "deploy":
+				err = app.Deploy(ctx, args.Deploy)
+			case "version":
+				err = app.Version(ctx, args.Version)
+			default:
+				err = oops.Errorf("unexpected command: %s", command)
+			}
+		}); panicErr != nil {
+			err = panicErr
+		}
+		if err != nil {
+			return fail(ctx, err)
+		}
 	}
 
 	return 0
 }
 
-func command(ctx context.Context, app *amplifyx.App, cmd string, args amplifyx.Args) error {
-	var err error
-
-	if panicErr := oops.Recover(func() {
-		switch cmd {
-		case "deploy":
-			err = app.Deploy(ctx, args.Deploy)
-		case "version":
-			err = app.Version(ctx, args.Version)
-		default:
-			err = oops.Errorf("unexpected command: %s", cmd)
-		}
-	}); panicErr != nil {
-		err = panicErr
-	}
-
-	return err
-}
-
-func fail(err error) int {
-	fmt.Fprintln(os.Stderr, err.Error())
+func fail(ctx context.Context, err error) int {
+	errLogger.ErrorContext(ctx, err.Error(), slog.Any("error", err))
 
 	return 1
 }
