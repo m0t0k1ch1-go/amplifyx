@@ -17,6 +17,14 @@ type DeployArgs struct {
 	ObservationInterval time.Duration `default:"5s"`
 }
 
+func (args DeployArgs) Validate() error {
+	if args.ObservationInterval < time.Second {
+		return oops.New("invalid observation interval: must be at least 1s")
+	}
+
+	return nil
+}
+
 func (app *App) Deploy(ctx context.Context, args DeployArgs) error {
 	var jobSummary *awsamplifytypes.JobSummary
 	{
