@@ -59,7 +59,7 @@ func run(ctx context.Context) int {
 			case "version":
 				err = app.Version(ctx, args.Version)
 			default:
-				err = oops.Errorf("unexpected command: %s", command)
+				err = oops.Errorf("unsupported command: %s", command)
 			}
 		}); panicErr != nil {
 			err = panicErr

@@ -65,10 +65,10 @@ func (app *App) Deploy(ctx context.Context, args DeployArgs) error {
 	case awsamplifytypes.JobStatusSucceed:
 		return nil
 	case awsamplifytypes.JobStatusFailed:
-		return oops.New("job failed")
+		return oops.New("failed to deploy: job failed")
 	case awsamplifytypes.JobStatusCancelled:
-		return oops.New("job cancelled")
+		return oops.New("failed to deploy: job cancelled")
 	default:
-		return oops.Errorf("unexpected job status: %s", jobStatus)
+		return oops.Errorf("unsupported job status: %s", jobStatus)
 	}
 }
