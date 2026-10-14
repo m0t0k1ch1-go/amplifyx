@@ -38,15 +38,15 @@ func run(ctx context.Context) int {
 		command = kctx.Command()
 	}
 
-	app, err := amplifyx.InitializeApp(ctx)
-	if err != nil {
-		return fail(ctx, oops.Wrapf(err, "failed to initialize app"))
-	}
-
 	if args.Timeout > 0 {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, args.Timeout)
 		defer cancel()
+	}
+
+	app, err := amplifyx.InitializeApp(ctx)
+	if err != nil {
+		return fail(ctx, oops.Wrapf(err, "failed to initialize app"))
 	}
 
 	{
