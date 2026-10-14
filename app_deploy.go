@@ -11,12 +11,14 @@ import (
 	"github.com/samber/oops"
 )
 
+// DeployArgs represents the arguments of the deploy command.
 type DeployArgs struct {
 	AppID               string        `required:""`
 	Branch              string        `default:"main"`
 	ObservationInterval time.Duration `default:"5s"`
 }
 
+// Validate returns an error if args is invalid.
 func (args DeployArgs) Validate() error {
 	errs := []error{}
 
@@ -33,6 +35,8 @@ func (args DeployArgs) Validate() error {
 	return oops.Join(errs...)
 }
 
+// Deploy starts a release job for the branch of the Amplify app and waits until the job finishes.
+// It returns an error if the job fails or is cancelled.
 func (app App) Deploy(ctx context.Context, args DeployArgs) error {
 	var jobSummary *awsamplifytypes.JobSummary
 	{

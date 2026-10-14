@@ -12,6 +12,7 @@ import (
 
 // Injectors from wire.go:
 
+// InitializeApp returns a new [App] whose AWS configuration is loaded from the environment.
 func InitializeApp(ctx context.Context) (*App, error) {
 	config, err := provideAWSConfig(ctx)
 	if err != nil {

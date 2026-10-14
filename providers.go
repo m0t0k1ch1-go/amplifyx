@@ -12,6 +12,7 @@ import (
 )
 
 var (
+	// ProviderSet is the set of providers that builds an [App].
 	ProviderSet = wire.NewSet(
 		provideAWSConfig,
 		provideAWSAmplifyClient,
