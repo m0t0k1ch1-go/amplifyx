@@ -73,7 +73,7 @@ func run(ctx context.Context) int {
 }
 
 func fail(ctx context.Context, err error) int {
-	errLogger.ErrorContext(ctx, err.Error(), slog.Any("error", err))
+	errLogger.ErrorContext(ctx, "failed to run", slog.Any("error", err))
 
 	return 1
 }
