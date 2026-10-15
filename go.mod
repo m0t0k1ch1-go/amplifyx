@@ -10,7 +10,9 @@ require (
 	github.com/aws/aws-sdk-go-v2/config v1.33.9
 	github.com/aws/aws-sdk-go-v2/service/amplify v1.48.4
 	github.com/goforj/wire v1.2.0
+	github.com/google/go-cmp v0.7.0
 	github.com/samber/oops v1.23.2
+	github.com/stretchr/testify v1.12.1
 )
 
 require (
@@ -30,13 +32,14 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/fsnotify/fsnotify v1.10.1 // indirect
 	github.com/google/subcommands v1.2.0 // indirect
-	github.com/matryer/moq v0.8.0 // indirect
+	github.com/matryer/moq v0.8.1 // indirect
 	github.com/oklog/ulid/v2 v2.1.2 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/samber/lo v1.53.0 // indirect
 	go.opentelemetry.io/otel v1.47.0 // indirect
 	go.opentelemetry.io/otel/trace v1.47.0 // indirect
-	golang.org/x/exp/typeparams v0.0.0-20261013213113-2ab7f3cbc5fb // indirect
+	go.yaml.in/yaml/v3 v3.0.5 // indirect
+	golang.org/x/exp/typeparams v0.0.0-20261014143641-f0251eb4aa3e // indirect
 	golang.org/x/mod v0.42.0 // indirect
 	golang.org/x/sync v0.24.0 // indirect
 	golang.org/x/sys v0.49.0 // indirect
