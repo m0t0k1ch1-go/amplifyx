@@ -81,7 +81,7 @@ func (app App) Deploy(ctx context.Context, args DeployArgs) error {
 	case awsamplifytypes.JobStatusFailed:
 		return oops.New("failed to deploy: job failed")
 	case awsamplifytypes.JobStatusCancelled:
-		return oops.New("failed to deploy: job cancelled")
+		return oops.New("failed to deploy: job canceled")
 	default:
 		return oops.Errorf("unsupported job status: %s", jobStatus)
 	}
