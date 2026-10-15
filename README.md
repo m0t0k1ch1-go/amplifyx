@@ -1,6 +1,7 @@
 # amplifyx - A tiny CLI for AWS Amplify
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/m0t0k1ch1-go/amplifyx/v2.svg)](https://pkg.go.dev/github.com/m0t0k1ch1-go/amplifyx/v2)
+[![test](https://github.com/m0t0k1ch1-go/amplifyx/actions/workflows/test.yaml/badge.svg)](https://github.com/m0t0k1ch1-go/amplifyx/actions/workflows/test.yaml)
+[![codecov](https://codecov.io/gh/m0t0k1ch1-go/amplifyx/graph/badge.svg?token=FO4ZRLAJ18)](https://codecov.io/gh/m0t0k1ch1-go/amplifyx)
 
 ## Installation
 
