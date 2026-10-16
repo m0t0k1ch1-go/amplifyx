@@ -11,9 +11,9 @@ import (
 	"github.com/m0t0k1ch1-go/amplifyx/v2"
 )
 
-var (
-	errLogger = slog.New(slog.NewJSONHandler(os.Stderr, nil))
-)
+func init() {
+	slog.SetDefault(amplifyx.NewLogger(os.Stdout, os.Stderr))
+}
 
 func main() {
 	os.Exit(run(context.Background()))
@@ -73,7 +73,7 @@ func run(ctx context.Context) int {
 }
 
 func fail(ctx context.Context, err error) int {
-	errLogger.ErrorContext(ctx, "failed to run", slog.Any("error", err))
+	slog.ErrorContext(ctx, "failed to run", slog.Any("error", err))
 
 	return 1
 }
