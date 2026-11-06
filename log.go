@@ -6,7 +6,9 @@ import (
 	"log/slog"
 )
 
-var _ slog.Handler = &logHandler{}
+var (
+	_ slog.Handler = &logHandler{}
+)
 
 type logHandler struct {
 	normal   slog.Handler
