@@ -25,14 +25,13 @@ func run(ctx context.Context) int {
 		args    amplifyx.Args
 	)
 	{
-		k, err := kong.New(&args)
-		if err != nil {
-			return fail(ctx, oops.Wrapf(err, "failed to initialize args parser"))
-		}
-
-		kctx, err := k.Parse(os.Args[1:])
-		if err != nil {
-			return fail(ctx, oops.Wrapf(err, "failed to parse args"))
+		var kctx *kong.Context
+		{
+			if k, err := kong.New(&args); err != nil {
+				return fail(ctx, oops.Wrapf(err, "failed to initialize args parser"))
+			} else if kctx, err = k.Parse(os.Args[1:]); err != nil {
+				return fail(ctx, oops.Wrapf(err, "failed to parse args"))
+			}
 		}
 
 		command = kctx.Command()
