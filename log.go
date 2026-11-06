@@ -6,6 +6,8 @@ import (
 	"log/slog"
 )
 
+var _ slog.Handler = &logHandler{}
+
 type logHandler struct {
 	normal   slog.Handler
 	abnormal slog.Handler
@@ -18,7 +20,7 @@ func newLogHandler(normal, abnormal slog.Handler) *logHandler {
 	}
 }
 
-func (h logHandler) handler(level slog.Level) slog.Handler {
+func (h *logHandler) handler(level slog.Level) slog.Handler {
 	if level >= slog.LevelWarn {
 		return h.abnormal
 	}
@@ -26,22 +28,22 @@ func (h logHandler) handler(level slog.Level) slog.Handler {
 	return h.normal
 }
 
-func (h logHandler) Enabled(ctx context.Context, level slog.Level) bool {
+func (h *logHandler) Enabled(ctx context.Context, level slog.Level) bool {
 	return h.handler(level).Enabled(ctx, level)
 }
 
-func (h logHandler) Handle(ctx context.Context, record slog.Record) error {
+func (h *logHandler) Handle(ctx context.Context, record slog.Record) error {
 	return h.handler(record.Level).Handle(ctx, record)
 }
 
-func (h logHandler) WithAttrs(attrs []slog.Attr) slog.Handler {
+func (h *logHandler) WithAttrs(attrs []slog.Attr) slog.Handler {
 	return newLogHandler(
 		h.normal.WithAttrs(attrs),
 		h.abnormal.WithAttrs(attrs),
 	)
 }
 
-func (h logHandler) WithGroup(name string) slog.Handler {
+func (h *logHandler) WithGroup(name string) slog.Handler {
 	return newLogHandler(
 		h.normal.WithGroup(name),
 		h.abnormal.WithGroup(name),
