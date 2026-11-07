@@ -2,7 +2,7 @@ module github.com/m0t0k1ch1-go/amplifyx/v2
 
 go 1.27
 
-toolchain go1.27.2
+toolchain go1.27.3
 
 require (
 	github.com/alecthomas/kong v1.16.1
