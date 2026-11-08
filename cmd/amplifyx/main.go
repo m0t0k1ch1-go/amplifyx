@@ -21,18 +21,22 @@ func main() {
 
 func run(ctx context.Context) int {
 	var (
-		args amplifyx.Args
-		kctx *kong.Context
+		command string
+		args    amplifyx.Args
 	)
 	{
-		if k, err := kong.New(&args); err != nil {
+		k, err := kong.New(&args)
+		if err != nil {
 			return fail(ctx, oops.Wrapf(err, "failed to initialize args parser"))
-		} else if kctx, err = k.Parse(os.Args[1:]); err != nil {
+		}
+
+		kctx, err := k.Parse(os.Args[1:])
+		if err != nil {
 			return fail(ctx, oops.Wrapf(err, "failed to parse args"))
 		}
-	}
 
-	command := kctx.Command()
+		command = kctx.Command()
+	}
 
 	if args.Timeout > 0 {
 		var cancel context.CancelFunc
